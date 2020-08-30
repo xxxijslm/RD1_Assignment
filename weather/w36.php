@@ -17,6 +17,7 @@
         // echo($obj->records->datasetDescription);
         // echo ("<br>");
         $location = $obj->records->location;
+        $countId = 1; 
         foreach ($location as $locationObject) {
             $countryName = $locationObject->locationName;
             $startTime = $locationObject->weatherElement[0]->time[0]->startTime;
@@ -26,22 +27,23 @@
             $mintcurrentWeather = $locationObject->weatherElement[2]->time[0]->parameter->parameterName;
             $cicurrentWeather = $locationObject->weatherElement[3]->time[0]->parameter->parameterName;
             $maxtcurrentWeather = $locationObject->weatherElement[4]->time[0]->parameter->parameterName;
-        // var_dump($currentWeather);
-        // echo ("$currentTime <br>");
+            // var_dump($currentWeather);
+            // echo ("$currentTime <br>");
             $weather36hSql = <<< lines
                 DELETE FROM weather36h  
-                WHERE countryId = $countryId AND startTime = '$startTime'
+                WHERE countryId = $countId AND startTime = '$startTime'
             lines;
+            // var_dump($weather36hSql);
             $weather36hResult = mysqli_query($link, $weather36hSql);
-
             $insertSql = <<< ins
                 INSERT INTO weather36h
                 (countryId, startTime, endTime, weather, minT, maxT, rainfall, storeDate, cicurrent)
                 VALUES
-                ($countryId, '$startTime', '$endTime', '$wxcurrentWeather', '$mintcurrentWeather', '$maxtcurrentWeather', '$popcurrentWeather', current_timestamp(), '$cicurrentWeather')
+                ($countId, '$startTime', '$endTime', '$wxcurrentWeather', '$mintcurrentWeather', '$maxtcurrentWeather', '$popcurrentWeather', current_timestamp(), '$cicurrentWeather')
             ins;
+            // // var_dump($insertSql);
             $insertResult = mysqli_query($link, $insertSql);
-            
+            $countId++;
             if($seletedCountry == $countryName){
             $mss = "
                     <strong> $countryName </strong> <br>
@@ -50,7 +52,6 @@
                     降雨機率:$popcurrentWeather %"; 
             }
         }  
-        
     }
-    
+        
 ?>

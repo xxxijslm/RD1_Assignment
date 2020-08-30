@@ -8,7 +8,13 @@
         SELECT * FROM `countries`
     multi;
     $result = mysqli_query($link, $sql);
-    
+    $findIdResult = mysqli_query($link, $sql);
+    // $count = 0;
+    // while($findIdRow = mysqli_fetch_assoc($findIdResult)) {
+    //     $countryId2[$count] = $findIdRow['countryName']; 
+    //     $count ++;
+    // }
+    // echo($countryId2[21]);
     
 ?>
 
