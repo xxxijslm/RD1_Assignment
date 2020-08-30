@@ -24,6 +24,7 @@
     <title>Weather</title>
 </head>
 <body onload="ShowTime()">
+    <h4><a href="index.php">天氣預報</a> | <a href="rain.php">雨量觀測</a></h4>
     <form method="POST" action="">
         <div class="select-box">
             <label for="country" class="label country"><span class="label-desc">選擇縣市</span> </label>

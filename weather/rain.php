@@ -1,7 +1,6 @@
 <?php
     require_once("config.php");
-    require_once("w36.php");
-    require_once("w2w.php");
+    require_once("r1.php");
     
     // var_dump($link);
     $sql = <<< multi
@@ -23,6 +22,7 @@
     <title>Weather</title>
 </head>
 <body onload="ShowTime()">
+    <h4><a href="index.php">天氣預報</a> | <a href="rain.php">雨量觀測</a></h4>
     <form method="POST" action="">
         <div class="select-box">
             <label for="country" class="label country"><span class="label-desc">選擇縣市</span> </label>
@@ -31,30 +31,29 @@
                     <option value="<?= $row['countryName'] ?>" <?= ($row['countryName']==$_POST['country']) ? "selected":"" ?>> <?= $row['countryName'] ?></option>
                 <?php } ?>
             </select>
-            <input name="w36Button" id="w36Button" class="btn btn-light" type="submit" value="當前天氣">
-            <input name="w2wButton" id="w2wButton" class="btn btn-light" type="submit" value="2週天氣">
+            <input name="r1Button" id="r1Button" class="btn btn-light" type="submit" value="過去1小時雨量">
         </div>
     </form>
     <div class="center">
         <div id="showbox"></div>
         <?php echo($_POST['country']) ?>
         <?= "<br> $mss" ?>
-        <table class="table">
-            <tr>
-                <th>時間：</th>
-                <th>天氣：</th>
-            </tr>
-            <tr>
-                <td>2020-08-30 12:00:00 - 2020-08-30 15:00:00</td>
-                <td>晴
-                    降雨機率 10%
-                    溫度攝氏34度
-                    易中暑
-                    偏東風 平均風速1-2級(每秒2公尺)
-                    相對濕度74%
-                </td>
-            </tr>
-        </table>
+        <?php if (isset($_POST['w2dButton'])) { ?>
+            <table class="table">
+                <tr>
+                    <th>時間：</th>
+                    <th>天氣：</th>
+                </tr>
+                <?php while ($w2dRow = mysqli_fetch_assoc($select2dResult)) { ?>
+                    <tr>
+                        <td><?= $w2dRow['startTime'] ?> -<br> <?= $w2dRow['endTime'] ?></td>
+                        <td>
+                            <?= str_replace("。", "<br>", $w2dRow['weather']) ?>
+                        </td>
+                    </tr>
+                <?php } ?>
+            </table>
+        <?php } ?>
     </div>
 
 </body>
