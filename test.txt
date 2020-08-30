@@ -1,0 +1,28 @@
+
+// //22個縣市的天氣現象
+                // $wxdescription = $locationObject->weatherElement[1]->description;
+                // $wxstartTime[$i] = $locationObject->weatherElement[1]->time[$i]->startTime;
+                // $wxendtime[$i] = $locationObject->weatherElement[1]->time[$i]->endTime;
+                // $wxvalue0[$i] = $locationObject->weatherElement[1]->time[$i]->elementValue[0]->value;
+                // // echo($wxvalue0[$i] . '222');
+                // // echo("<hr>");
+
+                // //22個縣市的體感溫度
+                // $atdataTime[$i] = $locationObject->weatherElement[2]->time[$i]->dataTime;
+                // $atvalue0[$i] = $locationObject->weatherElement[2]->time[$i]->elementValue[0]->value;
+                // // echo($atvalue0[$i] . '体感C');
+
+                // //22個縣市的溫度
+                // $tdataTime[$i] = $locationObject->weatherElement[3]->time[$i]->dataTime;
+                // $tvalue0[$i] = $locationObject->weatherElement[3]->time[$i]->elementValue[0]->value;
+                // // echo($tvalue0[$i] . '溫度C');
+
+                // //22個縣市的相對濕度
+                // $rhdataTime[$i] = $locationObject->weatherElement[4]->time[$i]->dataTime;
+                // $rhvalue0[$i] = $locationObject->weatherElement[4]->time[$i]->elementValue[0]->value;
+                // // echo($rhvalue0[$i] . '相對濕度%');
+
+                // //22個縣市的舒適度指數
+                // $cidataTime[$i] = $locationObject->weatherElement[5]->time[$i]->dataTime;
+                // $civalue0[$i] = $locationObject->weatherElement[5]->time[$i]->elementValue[1]->value;
+                // // echo($civalue0[$i] . '222');

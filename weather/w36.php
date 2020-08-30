@@ -46,7 +46,6 @@
             $countId++;
             if($seletedCountry == $countryName){
             $mss = "
-                    <strong> $countryName </strong> <br>
                     天氣狀況: $wxcurrentWeather <br>
                     溫度   : $mintcurrentWeather C - $maxtcurrentWeather C $cicurrentWeather<br>
                     降雨機率:$popcurrentWeather %"; 

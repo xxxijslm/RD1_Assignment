@@ -1,7 +1,7 @@
 <?php
     require_once("config.php");
     require_once("w36.php");
-    require_once("w2w.php");
+    require_once("w2d.php");
     
     // var_dump($link);
     $sql = <<< multi
@@ -9,13 +9,6 @@
     multi;
     $result = mysqli_query($link, $sql);
     $findIdResult = mysqli_query($link, $sql);
-    // $count = 0;
-    // while($findIdRow = mysqli_fetch_assoc($findIdResult)) {
-    //     $countryId2[$count] = $findIdRow['countryName']; 
-    //     $count ++;
-    // }
-    // echo($countryId2[21]);
-    
 ?>
 
 <!DOCTYPE html>
@@ -39,25 +32,34 @@
                 <?php } ?>
             </select>
             <input name="w36Button" id="w36Button" class="btn btn-light" type="submit" value="當前天氣">
-            <input name="w2wButton" id="w2wButton" class="btn btn-light" type="submit" value="2週天氣">
+            <input name="w2wButton" id="w2wButton" class="btn btn-light" type="submit" value="未來2天天氣">
         </div>
     </form>
-    <div id="debug" class="center">
+    <div class="center">
         <div id="showbox"></div>
-        <?= $mss?>
+        <?php echo($_POST['country']) ?>
+        <?= "<br> $mss" ?>
+        <?php if (isset($_POST['w2wButton'])) { ?>
+            <table class="table">
+                <tr>
+                    <th>時間：</th>
+                    <th>天氣：</th>
+                </tr>
+                <?php while ($w2dRow = mysqli_fetch_assoc($select2dResult)) { ?>
+                    <tr>
+                        <td><?= $w2dRow['startTime'] ?> -<br> <?= $w2dRow['endTime'] ?></td>
+                        <td>
+                            <?= str_replace("。", "<br>", $w2dRow['weather']) ?>
+                        </td>
+                    </tr>
+                <?php } ?>
+            </table>
+        <?php } ?>
     </div>
 
 </body>
 
 <script>
-    
-    // function countryChange() {
-    //     let selectedCountry = $("#country option:selected").text();
-    //     // $("#debug").text(selectedCountry);
-    // }
-    
-    // $("#country").change(countryChange);
-    // $("#country").trigger("change");
 
     $("select").on("click" , function() {
   
@@ -86,10 +88,6 @@
         
     });
 
-    // function ShowTime(){
-    // 　document.getElementById('showbox').innerHTML = new Date();
-    // 　setTimeout('ShowTime()',1000);
-    // }
     function ShowTime(){
     　document.getElementById('showbox').innerHTML = new Date();
     　setTimeout('ShowTime()',1000);

@@ -1,17 +1,14 @@
 <?php
-
-    $url = "https://opendata.cwb.gov.tw/api/v1/rest/datastore/F-C0032-001?Authorization=CWB-8249AB8F-7DF3-4C43-A7EF-AAB672630F41";
-    $result = file_get_contents($url);
-    $obj = json_decode($result,false);
-
     require_once("config.php");
+    require_once("w36.php");
+    require_once("w2w.php");
+    
     // var_dump($link);
     $sql = <<< multi
         SELECT * FROM `countries`
     multi;
     $result = mysqli_query($link, $sql);
-    require_once("w36.php");
-
+    $findIdResult = mysqli_query($link, $sql);
 ?>
 
 <!DOCTYPE html>
@@ -31,28 +28,38 @@
             <label for="country" class="label country"><span class="label-desc">選擇縣市</span> </label>
             <select name="country" id="country" class="select">
                 <?php while ($row = mysqli_fetch_assoc($result)) { ?>
-                    <option value="<?= $row['countryName'] ?>"> <?= $row['countryName'] ?></option>
+                    <option value="<?= $row['countryName'] ?>" <?= ($row['countryName']==$_POST['country']) ? "selected":"" ?>> <?= $row['countryName'] ?></option>
                 <?php } ?>
             </select>
-            <input name="okButton" id="okButton" class="btn btn-light" type="submit" value="OK">
+            <input name="w36Button" id="w36Button" class="btn btn-light" type="submit" value="當前天氣">
+            <input name="w2wButton" id="w2wButton" class="btn btn-light" type="submit" value="2週天氣">
         </div>
     </form>
-    <div id="debug" class="center">
+    <div class="center">
         <div id="showbox"></div>
-        <?= $mss?>
+        <?php echo($_POST['country']) ?>
+        <?= "<br> $mss" ?>
+        <table class="table">
+            <tr>
+                <th>時間：</th>
+                <th>天氣：</th>
+            </tr>
+            <tr>
+                <td>2020-08-30 12:00:00 - 2020-08-30 15:00:00</td>
+                <td>晴
+                    降雨機率 10%
+                    溫度攝氏34度
+                    易中暑
+                    偏東風 平均風速1-2級(每秒2公尺)
+                    相對濕度74%
+                </td>
+            </tr>
+        </table>
     </div>
 
 </body>
 
 <script>
-    
-    // function countryChange() {
-    //     let selectedCountry = $("#country option:selected").text();
-    //     // $("#debug").text(selectedCountry);
-    // }
-    
-    // $("#country").change(countryChange);
-    // $("#country").trigger("change");
 
     $("select").on("click" , function() {
   
@@ -81,10 +88,6 @@
         
     });
 
-    // function ShowTime(){
-    // 　document.getElementById('showbox').innerHTML = new Date();
-    // 　setTimeout('ShowTime()',1000);
-    // }
     function ShowTime(){
     　document.getElementById('showbox').innerHTML = new Date();
     　setTimeout('ShowTime()',1000);
