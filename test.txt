@@ -26,3 +26,21 @@
                 // $cidataTime[$i] = $locationObject->weatherElement[5]->time[$i]->dataTime;
                 // $civalue0[$i] = $locationObject->weatherElement[5]->time[$i]->elementValue[1]->value;
                 // // echo($civalue0[$i] . '222');
+
+
+                        //22個縣市3天報告
+        foreach ($location as $locationObject) {
+            $countryName = $locationObject->locationName;
+            // var_dump($countryName);
+            $pop12dweatherElement = $locationObject->weatherElement[0];
+            $pop12ddescription = $locationObject->weatherElement[0]->description;
+            
+            for ($i = 0; $i < 6; $i++) {
+                $pop12dstartTime[$i] = $locationObject->weatherElement[0]->time[$i]->startTime;
+                $pop12dendtime[$i] = $locationObject->weatherElement[0]->time[$i]->endTime;
+                $pop12dvalue0[$i] = $locationObject->weatherElement[0]->time[$i]->elementValue[0]->value;
+                $pop12dmeasures0[$i] = $locationObject->weatherElement[0]->time[$i]->elementValue[0]->measures;
+                // echo($pop12dvalue0[$i] . '雨');
+            }
+            // echo($pop12dstartTime[0] . '时间');
+        }

@@ -2,6 +2,7 @@
     require_once("config.php");
     require_once("w36.php");
     require_once("w2d.php");
+    require_once("w1w.php");
     
     // var_dump($link);
     $sql = <<< multi
@@ -32,14 +33,15 @@
                 <?php } ?>
             </select>
             <input name="w36Button" id="w36Button" class="btn btn-light" type="submit" value="當前天氣">
-            <input name="w2wButton" id="w2wButton" class="btn btn-light" type="submit" value="未來2天天氣">
+            <input name="w2dButton" id="w2dButton" class="btn btn-light" type="submit" value="未來2天天氣">
+            <input name="w1wButton" id="w1wButton" class="btn btn-light" type="submit" value="未來1週天氣">
         </div>
     </form>
     <div class="center">
         <div id="showbox"></div>
         <?php echo($_POST['country']) ?>
         <?= "<br> $mss" ?>
-        <?php if (isset($_POST['w2wButton'])) { ?>
+        <?php if (isset($_POST['w2dButton'])) { ?>
             <table class="table">
                 <tr>
                     <th>時間：</th>
@@ -50,6 +52,22 @@
                         <td><?= $w2dRow['startTime'] ?> -<br> <?= $w2dRow['endTime'] ?></td>
                         <td>
                             <?= str_replace("。", "<br>", $w2dRow['weather']) ?>
+                        </td>
+                    </tr>
+                <?php } ?>
+            </table>
+        <?php } ?>
+        <?php if (isset($_POST['w1wButton'])) { ?>
+            <table class="table">
+                <tr>
+                    <th>時間：</th>
+                    <th>天氣：</th>
+                </tr>
+                <?php while ($w1wRow = mysqli_fetch_assoc($select1wResult)) { ?>
+                    <tr>
+                        <td><?= $w1wRow['startTime'] ?> -<br> <?= $w1wRow['endTime'] ?></td>
+                        <td>
+                            <?= str_replace("。", "<br>", $w1wRow['weather']) ?>
                         </td>
                     </tr>
                 <?php } ?>

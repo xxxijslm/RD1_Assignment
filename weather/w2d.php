@@ -3,36 +3,17 @@
     $result = file_get_contents($url);
     $obj = json_decode($result,false);
     // var_dump($obj);
-    if(isset($_POST["w2wButton"])) {
+    if(isset($_POST["w2dButton"])) {
         $seletedCountry = $_POST['country'];
         // var_dump($obj->records->locations[0]->location);
         // echo($obj->records->locations[0]->datasetDescription);
         // echo ("<br>");
         $location = $obj->records->locations[0]->location;
         // var_dump($location);
-
-        //22個縣市的12小時降雨機率
-        foreach ($location as $locationObject) {
-            $countryName = $locationObject->locationName;
-            // var_dump($countryName);
-            $pop12dweatherElement = $locationObject->weatherElement[0];
-            $pop12ddescription = $locationObject->weatherElement[0]->description;
-            
-            for ($i = 0; $i < 6; $i++) {
-                $pop12dstartTime[$i] = $locationObject->weatherElement[0]->time[$i]->startTime;
-                $pop12dendtime[$i] = $locationObject->weatherElement[0]->time[$i]->endTime;
-                $pop12dvalue0[$i] = $locationObject->weatherElement[0]->time[$i]->elementValue[0]->value;
-                $pop12dmeasures0[$i] = $locationObject->weatherElement[0]->time[$i]->elementValue[0]->measures;
-                // echo($pop12dvalue0[$i] . '雨');
-            }
-            // echo($pop12dstartTime[0] . '时间');
-        }
-        
         
         foreach ($location as $locationObject) {
             $countryName = $locationObject->locationName;
             // var_dump($countryName);
-            // $wxweatherElement = $locationObject->weatherElement[1];
             $find2dSql = <<<f2d
                 SELECT * FROM `countries` WHERE countryName = '$countryName'
             f2d;
@@ -70,11 +51,11 @@
                     SELECT * 
                     FROM `weather2d`
                     WHERE countryId = $country2dId
-                    ORDER BY storeDate DESC LIMIT 25
+                    ORDER BY storeDate DESC LIMIT 24
                 s2d;
                 // var_dump($select2dSql);
                 $select2dResult = mysqli_query($link, $select2dSql);
-                // var_dump($select2dResult);
+                var_dump($select2dResult);
             }
         }  
     }
