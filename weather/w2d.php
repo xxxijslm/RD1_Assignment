@@ -10,7 +10,7 @@
         // echo ("<br>");
         $location = $obj->records->locations[0]->location;
         // var_dump($location);
-        
+        $same = 0;
         foreach ($location as $locationObject) {
             $countryName = $locationObject->locationName;
             // var_dump($countryName);
@@ -27,31 +27,58 @@
                 $wddescription = $locationObject->weatherElement[6]->description;
                 $wdstartTime[$i] = $locationObject->weatherElement[6]->time[$i]->startTime;
                 $wdendTime[$i] = $locationObject->weatherElement[6]->time[$i]->endTime;
-                $wdvalue0[$i] = $locationObject->weatherElement[6]->time[$i]->elementValue[0]->value;
-                
-                // echo($wdValue[$i]);
-                // echo ("<hr>");
-                $weather2dSql = <<< w2d
-                    DELETE FROM weather2d  
-                    WHERE countryId = $country2dId AND startTime = '$wdstartTime[$i]'
-                w2d;
-                // var_dump($weather2dSql);
-                $weather2dResult = mysqli_query($link, $weather2dSql);
-                $insert2dSql = <<<i2d
-                    INSERT INTO weather2d
-                    (countryId, startTime, endTime, weather, storeDate)
-                    VALUES
-                    ($country2dId, '$wdstartTime[$i]', '$wdendTime[$i]', '$wdvalue0[$i]', current_timestamp())
-                i2d;
-                $insert2dResult = mysqli_query($link, $insert2dSql);
-                // var_dump($insert2dResult);  
+                $wdvalue0[$i] = $locationObject->weatherElement[6]->time[$i]->elementValue[0]->value;         
+                if ($same == 0) {
+                    $findSameSql = <<<fs
+                        SELECT * 
+                        FROM `weather2d`
+                        WHERE countryId = $country2dId AND startTime = '$wdstartTime[$i]'
+                    fs;
+                    $findSameResult = mysqli_query($link, $findSameSql);
+                    // var_dump($findSameSql);
+                    $findSameRow = mysqli_fetch_assoc($findSameResult);
+                    $checkTime = $findSameRow['startTime'];
+                    // var_dump($checkTime);
+                    if (strtotime($checkTime) != strtotime($wdstartTime[$i])) {
+                        $same = 1;      //要insert新資料
+                        // echo($same);
+                    }
+                    else {
+                        $same = 2;
+                    }
+                }
+                if ($same == 1) {
+                    $insert2dSql = <<<i2d
+                        INSERT INTO weather2d
+                        (countryId, startTime, endTime, weather, storeDate)
+                        VALUES
+                        ($country2dId, '$wdstartTime[$i]', '$wdendTime[$i]', '$wdvalue0[$i]', current_timestamp())
+                    i2d;
+                    $insert2dResult = mysqli_query($link, $insert2dSql);
+                    // var_dump($insert2dSql);  
+                }
             }
             if($seletedCountry == $countryName){
+                $countSql = <<<cs
+                    SELECT COUNT(*) total 
+                    FROM `weather2d`
+                    WHERE countryId = $country2dId
+                cs;
+                $countResult = mysqli_query($link, $countSql);
+                $countRow = mysqli_fetch_assoc($countResult);
+                $total = $countRow['total'];
+                if($total == 24) {
+                    $limit = 0;
+                }
+                else{
+                    $limit = $total - 25;
+                }
+            
                 $select2dSql = <<<s2d
                     SELECT * 
                     FROM `weather2d`
                     WHERE countryId = $country2dId
-                    ORDER BY storeDate DESC LIMIT 24
+                    ORDER BY weather2dId LIMIT $limit, 25
                 s2d;
                 // var_dump($select2dSql);
                 $select2dResult = mysqli_query($link, $select2dSql);

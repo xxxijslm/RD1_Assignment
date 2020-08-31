@@ -8,7 +8,7 @@
         // var_dump($obj->records->location);
         $location = $obj->records->location;
         // var_dump($location);
-        
+        $same = 0;
         foreach ($location as $locationObject) {
             $stationName = $locationObject->locationName;
             // var_dump($stationName);
@@ -28,14 +28,24 @@
             $findr1Row = mysqli_fetch_assoc($findr1Result);
             $countryr1Id = $findr1Row['countryId'];
             // var_dump($countryr1Id);
-            
-                $weatherRainSql = <<< wr
-                    DELETE FROM weatherRain
-                    WHERE stationName = '$stationName' AND obsTime = '$obsTime'
-                wr;
-                // var_dump($weatherRainSql);
-                $weatherRainResult = mysqli_query($link, $weatherRainSql);
-                // var_dump($weatherRainResult);
+            if ($same == 0) {
+                $findSameSql = <<<fs
+                    SELECT * 
+                    FROM `weatherRain`
+                    WHERE countryId = $countryr1Id AND obsTime = '$obsTime'
+                fs;
+                $findSameResult = mysqli_query($link, $findSameSql);
+                // var_dump($findSameResult);
+                $findSameRow = mysqli_fetch_assoc($findSameResult);
+                $checkTime = $findSameRow['obsTime'];
+                if (strtotime($checkTime) != strtotime($obsTime)) {
+                    $same = 1;      //要insert新資料
+                }
+                else {
+                    $same = 2;
+                }
+            }
+            if ($same == 1) {
                 $insertRainSql = <<<ir
                     INSERT INTO weatherRain
                     (countryId, stationName, rain, hour24, storeDate, obsTime)
@@ -44,7 +54,8 @@
                 ir;
                 // var_dump($insertRainSql);
                 $insertRainResult = mysqli_query($link, $insertRainSql);
- 
+            }
+                
             if($seletedCountry == $parameterValue){
                 $selectRainSql = <<<sr
                     SELECT * 
