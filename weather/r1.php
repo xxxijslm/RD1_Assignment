@@ -12,6 +12,8 @@
         foreach ($location as $locationObject) {
             $stationName = $locationObject->locationName;
             // var_dump($stationName);
+            $obsTime = $locationObject->time->obsTime;
+            // var_dump($obsTime);
             $parameterValue = $locationObject->parameter[0]->parameterValue;
             // var_dump($parameterValue);
             $r1helementValue = $locationObject->weatherElement[1]->elementValue;
@@ -26,41 +28,33 @@
             $findr1Row = mysqli_fetch_assoc($findr1Result);
             $countryr1Id = $findr1Row['countryId'];
             // var_dump($countryr1Id);
-    //         for ($i = 0; $i < 24; $i++) {
-    //             //22個縣市的天氣預報綜合描述
-    //             $wddescription = $locationObject->weatherElement[6]->description;
-    //             $wdstartTime[$i] = $locationObject->weatherElement[6]->time[$i]->startTime;
-    //             $wdendTime[$i] = $locationObject->weatherElement[6]->time[$i]->endTime;
-    //             $wdvalue0[$i] = $locationObject->weatherElement[6]->time[$i]->elementValue[0]->value;
-                
-    //             // echo($wdValue[$i]);
-    //             // echo ("<hr>");
-    //             $weather2dSql = <<< w2d
-    //                 DELETE FROM weather2d  
-    //                 WHERE countryId = $country2dId AND startTime = '$wdstartTime[$i]'
-    //             w2d;
-    //             // var_dump($weather2dSql);
-    //             $weather2dResult = mysqli_query($link, $weather2dSql);
-    //             $insert2dSql = <<<i2d
-    //                 INSERT INTO weather2d
-    //                 (countryId, startTime, endTime, weather, storeDate)
-    //                 VALUES
-    //                 ($country2dId, '$wdstartTime[$i]', '$wdendTime[$i]', '$wdvalue0[$i]', current_timestamp())
-    //             i2d;
-    //             $insert2dResult = mysqli_query($link, $insert2dSql);
-    //             // var_dump($insert2dResult);  
-    //     }
-    //         if($seletedCountry == $countryName){
-    //             $select2dSql = <<<s2d
-    //                 SELECT * 
-    //                 FROM `weather2d`
-    //                 WHERE countryId = $country2dId
-    //                 ORDER BY storeDate DESC LIMIT 24
-    //             s2d;
-    //             // var_dump($select2dSql);
-    //             $select2dResult = mysqli_query($link, $select2dSql);
-    //             var_dump($select2dResult);
-    //         }
+            
+                $weatherRainSql = <<< wr
+                    DELETE FROM weatherRain
+                    WHERE stationName = '$stationName' AND obsTime = '$obsTime'
+                wr;
+                // var_dump($weatherRainSql);
+                $weatherRainResult = mysqli_query($link, $weatherRainSql);
+                // var_dump($weatherRainResult);
+                $insertRainSql = <<<ir
+                    INSERT INTO weatherRain
+                    (countryId, stationName, rain, hour24, storeDate, obsTime)
+                    VALUES
+                    ($countryr1Id, '$stationName', '$r1helementValue', '$r24helementValue', current_timestamp(), '$obsTime')
+                ir;
+                // var_dump($insertRainSql);
+                $insertRainResult = mysqli_query($link, $insertRainSql);
+ 
+            if($seletedCountry == $parameterValue){
+                $selectRainSql = <<<sr
+                    SELECT * 
+                    FROM `weatherRain`
+                    WHERE countryId = $countryr1Id AND obsTime = '$obsTime';
+                sr;
+                // var_dump($selectRainSql);
+                $selectRainResult = mysqli_query($link, $selectRainSql);
+                // var_dump($selectRainResult);
+            }
         }  
     }
     

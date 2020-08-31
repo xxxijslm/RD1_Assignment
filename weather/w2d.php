@@ -55,7 +55,7 @@
                 s2d;
                 // var_dump($select2dSql);
                 $select2dResult = mysqli_query($link, $select2dSql);
-                var_dump($select2dResult);
+                // var_dump($select2dResult);
             }
         }  
     }

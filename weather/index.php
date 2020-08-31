@@ -9,7 +9,16 @@
         SELECT * FROM `countries`
     multi;
     $result = mysqli_query($link, $sql);
-    $findIdResult = mysqli_query($link, $sql);
+
+    $countryImgName = $_POST['country'];
+    $imgSql = <<< is
+        SELECT countryImg FROM `countries` WHERE countryName = '$countryImgName';
+    is;
+    $findImgResult = mysqli_query($link, $imgSql);
+    $findImgRow = mysqli_fetch_assoc($findImgResult);
+    $image = $findImgRow['countryImg'];
+    // echo ($image);
+    // var_dump($imgSql);
 ?>
 
 <!DOCTYPE html>
@@ -24,7 +33,7 @@
     <title>Weather</title>
 </head>
 <body onload="ShowTime()">
-    <h4><a href="index.php">天氣預報</a> | <a href="rain.php">雨量觀測</a></h4>
+    <h4 class="navbar"><a class="active" href="index.php">天氣預報</a> | <a href="rain.php">雨量觀測</a></h4>
     <form method="POST" action="">
         <div class="select-box">
             <label for="country" class="label country"><span class="label-desc">選擇縣市</span> </label>
@@ -40,7 +49,7 @@
     </form>
     <div class="center">
         <div id="showbox"></div>
-        <?php echo($_POST['country']) ?>
+        <?php echo($_POST['country']) ?> <img class="img-fluid" src=" <?= $image ?> ">
         <?= "<br> $mss" ?>
         <?php if (isset($_POST['w2dButton'])) { ?>
             <table class="table">

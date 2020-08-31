@@ -7,7 +7,14 @@
         SELECT * FROM `countries`
     multi;
     $result = mysqli_query($link, $sql);
-    $findIdResult = mysqli_query($link, $sql);
+
+    $countryImgName = $_POST['country'];
+    $imgSql = <<< is
+        SELECT countryImg FROM `countries` WHERE countryName = '$countryImgName';
+    is;
+    $findImgResult = mysqli_query($link, $imgSql);
+    $findImgRow = mysqli_fetch_assoc($findImgResult);
+    $image = $findImgRow['countryImg'];
 ?>
 
 <!DOCTYPE html>
@@ -22,7 +29,7 @@
     <title>Weather</title>
 </head>
 <body onload="ShowTime()">
-    <h4><a href="index.php">天氣預報</a> | <a href="rain.php">雨量觀測</a></h4>
+    <h4 class="navbar"><a href="index.php">天氣預報</a> | <a class="active" href="rain.php">雨量觀測</a></h4>
     <form method="POST" action="">
         <div class="select-box">
             <label for="country" class="label country"><span class="label-desc">選擇縣市</span> </label>
@@ -31,25 +38,27 @@
                     <option value="<?= $row['countryName'] ?>" <?= ($row['countryName']==$_POST['country']) ? "selected":"" ?>> <?= $row['countryName'] ?></option>
                 <?php } ?>
             </select>
-            <input name="r1Button" id="r1Button" class="btn btn-light" type="submit" value="過去1小時雨量">
+            <input name="r1Button" id="r1Button" class="btn btn-light" type="submit" value="雨量偵測">
         </div>
     </form>
     <div class="center">
         <div id="showbox"></div>
-        <?php echo($_POST['country']) ?>
+        <?php echo($_POST['country']) ?><img class="img-fluid" src=" <?= $image ?> ">
         <?= "<br> $mss" ?>
-        <?php if (isset($_POST['w2dButton'])) { ?>
+        <?php if (isset($_POST['r1Button'])) { ?>
             <table class="table">
                 <tr>
-                    <th>時間：</th>
-                    <th>天氣：</th>
+                    <th>觀察站：</th>
+                    <th>觀察時間：</th>
+                    <th>過去1小時雨量：</th>
+                    <th>過去24小時雨量：</th>
                 </tr>
-                <?php while ($w2dRow = mysqli_fetch_assoc($select2dResult)) { ?>
+                <?php while ($wRainRow = mysqli_fetch_assoc($selectRainResult)) { ?>
                     <tr>
-                        <td><?= $w2dRow['startTime'] ?> -<br> <?= $w2dRow['endTime'] ?></td>
-                        <td>
-                            <?= str_replace("。", "<br>", $w2dRow['weather']) ?>
-                        </td>
+                        <td><?= $wRainRow['stationName'] ?></td>
+                        <td><?= $wRainRow['obsTime'] ?></td>
+                        <td><?= $wRainRow['rain'] ?></td>
+                        <td><?= $wRainRow['hour24'] ?></td>
                     </tr>
                 <?php } ?>
             </table>
