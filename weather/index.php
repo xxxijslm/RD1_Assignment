@@ -1,10 +1,17 @@
 <?php
     require_once("config.php");
-    require_once("w36.php");
-    require_once("w2d.php");
+    if(isset($_POST["w36Button"])) {
+        require_once("w36.php");
+    }
+    if(isset($_POST["w2dButton"])) {
+        require_once("w2d.php");
+    }
+    if(isset($_POST["w1wButton"])) {
     require_once("w1w.php");
+    }
     
     // var_dump($link);
+    
     $sql = <<< multi
         SELECT * FROM `countries`
     multi;

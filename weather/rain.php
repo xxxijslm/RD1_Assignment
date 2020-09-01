@@ -1,6 +1,8 @@
 <?php
     require_once("config.php");
-    require_once("r1.php");
+    if(isset($_POST["r1Button"])) {
+        require_once("r1.php");
+    }
     
     // var_dump($link);
     $sql = <<< multi
