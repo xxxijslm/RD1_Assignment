@@ -10,8 +10,9 @@
         // echo ("<br>");
         $location = $obj->records->locations[0]->location;
         // var_dump($location);
-        $same = 0;
+        
         foreach ($location as $locationObject) {
+            
             $countryName = $locationObject->locationName;
             // var_dump($countryName);
             $find2dSql = <<<f2d
@@ -23,6 +24,7 @@
             $country2dId = $find2dRow['countryId'];
             // var_dump($country2dId);
             for ($i = 0; $i < 24; $i++) {
+                $same = 0;
                 //22個縣市的天氣預報綜合描述
                 $wddescription = $locationObject->weatherElement[6]->description;
                 $wdstartTime[$i] = $locationObject->weatherElement[6]->time[$i]->startTime;
@@ -71,7 +73,7 @@
                     $limit = 0;
                 }
                 else{
-                    $limit = $total - 25;
+                    $limit = $total - 23;
                 }
             
                 $select2dSql = <<<s2d

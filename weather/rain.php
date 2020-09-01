@@ -45,7 +45,7 @@
         <div id="showbox"></div>
         <img class="img-fluid" src=" <?= $image ?> ">
         <br>
-        <?php echo($_POST['country']) ?>
+        <strong><?php echo($_POST['country']) ?></strong>
         <?= "<br> $mss" ?>
         <?php if (isset($_POST['r1Button'])) { ?>
             <table class="table">
