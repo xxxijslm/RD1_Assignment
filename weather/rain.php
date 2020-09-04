@@ -34,7 +34,7 @@
     <h4 class="navbar"><a href="index.php">天氣預報</a> | <a class="active" href="rain.php">雨量觀測</a></h4>
     <form method="POST" action="">
         <div class="select-box">
-            <label for="country" class="label country"><span class="label-desc">選擇縣市</span> </label>
+            <label for="country" class="label country"><span class="label-desc"><?= (isset($_POST['country'])) ? "$countryImgName" : "選擇縣市"?></span> </label>
             <select name="country" id="country" class="select">
                 <?php while ($row = mysqli_fetch_assoc($result)) { ?>
                     <option value="<?= $row['countryName'] ?>" <?= ($row['countryName']==$_POST['country']) ? "selected":"" ?>> <?= $row['countryName'] ?></option>
