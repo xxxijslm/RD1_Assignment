@@ -73,13 +73,13 @@
                     $limit = 0;
                 }
                 else{
-                    $limit = $total - 14;
+                    $limit = $total - 16;
                 }
                 $select1wSql = <<<s1w
                     SELECT * 
                     FROM `weather1w`
                     WHERE countryId = $country1wId
-                    ORDER BY weather1wId LIMIT $limit, 15
+                    ORDER BY weather1wId LIMIT $limit, 16
                 s1w;
                 // var_dump($select1wSql);
                 $select1wResult = mysqli_query($link, $select1wSql);

@@ -7,7 +7,7 @@
         require_once("w2d.php");
     }
     if(isset($_POST["w1wButton"])) {
-    require_once("w1w.php");
+        require_once("w1w.php");
     }
     
     // var_dump($link);
